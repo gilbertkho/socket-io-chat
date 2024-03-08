@@ -11,17 +11,26 @@
     crossorigin="anonymous"></script>
     <script src="https://cdn.socket.io/4.7.4/socket.io.min.js" integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4" crossorigin="anonymous"></script>
     <style>
-        #chat-input, #chat-content{
+        #chat-name, #chat-input, #chat-content{
             width: 600px;
         }
         #chat-content{
             height: 300px;
             overflow-y: auto;
         }
+        .read-receipt > li::marker{
+            color: green;
+        }
     </style>
 </head>
 <body>
     <div id="chat-room" class="flex items-center justify-center w-full flex-col p-[10px]">
+        <div id="chat-name">
+            <div class="grid grid-cols-12 gap-2 p-[10px]">
+                <h2 class="col-span-2">Name</h2>
+                <input class="col-span-10 text-black border" type="text" id="name">
+            </div>
+        </div>
         <div id="chat-content" class="border border-[black]">
 
         </div>
