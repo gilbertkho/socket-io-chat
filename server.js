@@ -1,7 +1,20 @@
+const { initializeApp, applicationDefault } = require('firebase-admin/app');
+const { getMessaging } = require("firebase-admin/messaging");
+process.env.GOOGLE_APPLICATION_CREDENTIALS;
+
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 
+var admin = require("firebase-admin");
+//get sevice account key from project setting in firebase
+var serviceAccount = require("./muatmuat-10fda-firebase-adminsdk-l7z4g-a32a2fe127.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+//directory for views in src
 app.use(express.static('./src'));
 
 app.get('/', async(req, res) => {
@@ -40,6 +53,27 @@ io.on('connection', async (socket) => {
             //meet person to one room
             socket.to(room).emit("receive-message", message, name);
             getConnectedUsers(room, name);
+
+            //get Token From device;
+            const registrationToken = `cFUsz7s2Rd2E2W1D1BxFb1:APA91bH6DEwcFja-IPZp6SguXCt842zzLl0rbjP9NuLyJRClu_7tithuaBXjZJM8pq3oG-TG5NNAfZsP53IzaQyGG1VZa5mKWOoC8v66nxembKtSddFlE0brlK84GIZqsfywXXy6S51l` 
+
+            const notificationMessage = {
+                data: {
+                    message: message
+                },
+                token: registrationToken
+            };
+
+            getMessaging().send(notificationMessage)
+            .then((response) => {
+                // Response is a message ID string.
+                console.log('Successfully sent message:', response);
+            })
+            .catch((error) => {
+                console.log('Error sending message:', error);
+            });
+
+            console.log(notificationMessage);
         }
     });
 
@@ -52,7 +86,7 @@ io.on('connection', async (socket) => {
 
         //console.log("CONNECTED USERS", userData);
 
-        let check_users = false //not exist
+        let check_users = false //not exist by name
         for(let i = 0; i < connectedUsers.length; i++){
             if(connectedUsers[i].room && connectedUsers[i].room != ''){
                 if(connectedUsers[i].room  == room && connectedUsers[i].name == name){
@@ -65,8 +99,6 @@ io.on('connection', async (socket) => {
             connectedUsers.push(userData);
         }
         socket.to(room).emit('connected-users', connectedUsers);
-
-
         //console.log(connectedUsers);
     }
 
@@ -77,7 +109,8 @@ io.on('connection', async (socket) => {
     //join room
     socket.on('join-room', (room, name = '') => {
         console.log(room, name);
-        socket.join(room);
+        socket.join(room)
+        io.to(room).emit('user-connected', `${name} connected!`);
         getConnectedUsers(room, name);
     });
 

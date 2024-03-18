@@ -21,6 +21,14 @@ const showMessage = (message, name = '', info) => {
         </div>
     </div>`;
 
+    if(!name  && !info) {
+        bubble = `<div class="msg flex justify-center text-black">
+            <div class="w-full text-center border border-black p-[10px] m-[15px]">
+                ${message}
+            </div>
+        </div>`;
+    }
+
     $('#chat-content').append(bubble);
     var elem = document.getElementById('chat-content');
     elem.scrollTop = elem.scrollHeight;
@@ -98,6 +106,19 @@ socket.on('receive-message', (message, name) => {
     //console.log(message, name);
     showMessage(message, name, 'client');
     console.log('users connected: ',connectedUsers);
+    Notification.requestPermission().then(perm => {
+        if(perm === "granted"){
+            if(!name){
+                return new Notification("Broadcast Message",{
+                    "body": message
+                });
+            }
+
+            return new Notification(name,{
+                "body": message
+            });
+        }
+    });
     //showMessage(message, name, 'client');
     //document.getElementById('#chat-content').scrollTo(0);
 });
@@ -107,6 +128,13 @@ socket.on('type-status', (status) => {
     showTypingStatus(status, 'client');
     //console.log('tesss');
 });
+
+
+//get user connected message
+socket.on('user-connected', (message) => {
+    console.log(message);
+    showMessage(message);
+})
 
 //get connected users
 socket.on('connected-users', (users) => {
