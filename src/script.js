@@ -58,6 +58,38 @@ const showTypingStatus = (status, info) => {
     }
 }
 
+const showImage = (url, name = '', info) => {
+    let bubble = info ==  'client' ? 
+    `<div class="msg flex justify-end text-black">
+        <div class="w-fit border border-black p-[10px] m-[15px]">
+            ${name}
+            <ul class="list-disc list-inside">
+                <li><img src="${url}" onclick=""/></li>
+            </ul>
+        </div>
+    </div>`: 
+    `<div class="msg flex justify-start text-black">
+        <div class="w-fit border border-black p-[10px] m-[15px]">
+            ${name}
+            <ul class="msg-content list-disc list-inside ${connectedUsers > 1 ? 'read-receipt' : ''}">
+                <li><img src="${url}"/></li>
+            </ul>
+        </div>
+    </div>`;
+
+    if(!name  && !info) {
+        bubble = `<div class="msg flex justify-center text-black">
+            <div class="w-full text-center border border-black p-[10px] m-[15px]">
+                ${message}
+            </div>
+        </div>`;
+    }
+
+    $('#chat-content').append(bubble);
+    var elem = document.getElementById('chat-content');
+    elem.scrollTop = elem.scrollHeight;
+}
+
 $("#join").on('click', function(){
     let name    = $('#name').val() ? $('#name').val() : '';
     let room    = $('#room').val();
@@ -151,4 +183,23 @@ socket.on('connected-users', (users) => {
 socket.on('disconnected-users', (users) => {
     connectedUsers = users.length;
     //console.log(users);
-})
+});
+
+socket.on('getFile', (url, name) => {
+    showImage(url, name, 'client');
+});
+
+//upload file function
+$("#fileUpload").on('change', function(e){
+    let files = e.target.files; //get files
+    
+    //send file via socket
+    let name    = $('#name').val();
+    let room    = $('#room').val();
+    let url     = URL.createObjectURL(files[0]);
+    showImage(url, name, 'own');
+    socket.emit('upload', room, name, files[0], (status) => {
+        //console.log(status);
+    });
+    console.log(files[0]);
+});

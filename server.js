@@ -5,20 +5,35 @@ process.env.GOOGLE_APPLICATION_CREDENTIALS;
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
+const fs = require('node:fs'); //file system API
+const url = require('url'); //url API
+let hostUrl = '';
 
 var admin = require("firebase-admin");
 //get sevice account key from project setting in firebase
-var serviceAccount = require("./muatmuat-10fda-firebase-adminsdk-l7z4g-a32a2fe127.json");
+/*var serviceAccount = require("./muatmuat-10fda-firebase-adminsdk-l7z4g-a32a2fe127.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
-});
+});*/
 
 //directory for views in src
 app.use(express.static('./src'));
 
 app.get('/', async(req, res) => {
+    hostUrl = url.format({
+        protocol: req.protocol,
+        host: req.get('host'),
+        pathname: req.originalUrl
+    });
+
+    console.log(hostUrl);
+
     return res.status(200).sendFile('index.js');
+});
+
+app.get('/pic', async(req, res) => {
+    return res.status(200).sendFile('tmp/upload/pic.png', {root: '.'});
 });
 
 const io = require('socket.io')(server,{
@@ -29,6 +44,7 @@ const io = require('socket.io')(server,{
 
 let connectedUsers = [];
 io.on('connection', async (socket) => {
+    console.log('HOST URL', hostUrl);
     //connectedUsers.push(socket);
     //console.log(socket);
     // const projects = await fetchProjects(socket);
@@ -128,7 +144,7 @@ io.on('connection', async (socket) => {
             socket.to(room).emit("type-status", status);
         }
         getConnectedUsers(room, name);
-    })
+    });
 
     socket.on('disconnect', () => {
         //console.log('JUMLAH ROOM DISCONNECT',socket.client);
@@ -151,14 +167,33 @@ io.on('connection', async (socket) => {
             console.log('USERS LEFT : ',connectedUsers);
             socket.to(room).emit('disconnected-users', connectedUsers);
         }
-        
         //getConnectedUsers();
         //var i = connectedUsers.indexOf(socket);
         //connectedUsers.splice(i,1);
+    });
+
+    //get uploaded file
+    socket.on('upload', (room, name, file, callback) => {
+        console.log('ROOM', room);
+        //console.log('tesss');
+        //console.log(file);
+        file = Buffer.from(file,'base64');
+
+        fs.writeFile("tmp/upload/pic.png", file, (err) => {
+            //callback({ message: err ? "failure" : "success" });
+            if(err){
+                console.log(err);
+            }
+            else{
+                let imageUrl = "http://localhost:8080/pic";
+                socket.to(room).emit('getFile', imageUrl, name);
+                console.log('MASUKK');
+            }
+        });
     })
 });
 
-server.listen(8080, () => {    
+server.listen(8080, () => { 
     console.log(`server started!`);
     //npm run devStart
     //console.log(process.env.PORT);
