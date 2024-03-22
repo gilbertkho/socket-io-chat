@@ -11,41 +11,229 @@
     crossorigin="anonymous"></script>
     <script src="https://cdn.socket.io/4.7.4/socket.io.min.js" integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4" crossorigin="anonymous"></script>
     <style>
+        #chat-body{
+            /* background-color: aliceblue; */
+            width: 100%;
+            /* max-width: 900px; */
+            max-height: 100vh;
+        }
         #chat-name, #chat-input, #chat-content{
-            max-width: 600px;
             width: 100%;
         }
         #chat-content{
-            height: 300px;
+            min-height: 404px;
             overflow-y: auto;
         }
         .read-receipt > li::marker{
             color: green;
         }
+        .card-shadow{
+            box-shadow: 0px 4px 14px rgba(0,0,0,0.08);
+        }
+        .attachment-shadow{
+            box-shadow: 0px 4px 11px 0px rgba(0, 0, 0, 0.29);
+        }
+        #chat-list{
+            width: 324px;
+        }
+        #user-list{
+            max-width: 312px;
+        }
+        #chat-room{
+            width: 544px;
+        }
+        #chat-search-input:focus {            
+            outline: none;
+        }
     </style>
 </head>
-<body>
-    <div id="chat-room" class="flex items-center justify-center w-full flex-col p-[10px]">
-        <div id="chat-name">
-            <div class="grid grid-cols-12 gap-2 p-[10px]">
+<body class="p-[10px]">
+    <div id="chat-body" class="flex mx-auto card-shadow">
+        <div id="chat-list" class="flex flex-col border p-[12px]">
+            <!-- commented cause still working on design -->
+            <div class="grid  gap-2 px-[10px]">
                 <h2 class="col-span-2">Name</h2>
                 <input class="col-span-10 text-black border" type="text" id="name">
             </div>
-        </div>
-        <div id="chat-content" class="border border-[black]">
-
-        </div>
-        <div id="chat-input">
-            <div class="grid grid-cols-12 gap-2 pt-[10px]">
-                <h2 class="col-span-2">Message</h2>
-                <input class="col-span-7 text-black border" type="text" id="message">
-                <button class="col-span-3 text-black border" id="send">Send</button>
-                <input class="col-span-12" type="file" id="fileUpload">
-            </div>
-            <div class="grid grid-cols-12 gap-2 py-[10px]">
+            <div class="grid grid-cols-12 gap-2 p-[10px]">
                 <h2 class="col-span-2">Room</h2>
                 <input class="col-span-7 text-black border" type="text" id="room">
                 <button class="col-span-3 text-black border" id="join">Join</button>
+            </div>
+            <div id="chat-search" class="border-b flex gap-[8px] pb-[12px]">
+                <div class="flex border border-[#868686] rounded-[6px] gap-[8px] flex-1">
+                    <img class="py-[8px] ps-[8px]" src="./assets/search.svg">
+                    <input id="chat-search-input" class="text-[12px] font-[500] rounded-[6px] flex-1" type="text" placeholder="Cari Obrolan">
+                </div>
+                <button class="w-[32px] h-[32px] p-[8px] border border-[#868686] rounded-full">
+                    <img src="./assets/chat_filter.svg">
+                </button>
+            </div>
+            <div id="user-list" class="overflow-y-auto w-full flex flex-col gap-[8px] pt-[12px]">
+                <div class="flex p-[8px] gap-[8px] border rounded-[8px] border-[black] ">
+                    <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
+                        <!-- user image -->
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-center justify-between">
+                            <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
+                            <span class="msg-last-time text-[10px]">24/02/1997</span>
+                        </div>
+                        <!-- new message content -->
+                        <div class="msg-content flex items-center gap-[12px]">
+                            <span class="text-[12px] max-w-[190px] truncate">
+                                message content for testing purpose only
+                            </span>
+                            <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
+                                1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-start p-[8px] gap-[8px] border-b ">
+                    <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
+                        <!-- user image -->
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-center justify-between">
+                            <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
+                            <span class="msg-last-time text-[10px]">Kemarin</span>
+                        </div>
+                        <!-- new message content -->
+                        <div class="msg-content flex items-center gap-[12px]">
+                            <span class="text-[12px] max-w-[190px] truncate">
+                                message content for testing purpose only
+                            </span>
+                            <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
+                                1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-start p-[8px] gap-[8px] border-b ">
+                    <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
+                        <!-- user image -->
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-center justify-between">
+                            <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
+                            <span class="msg-last-time text-[10px]">24/02/1997</span>
+                        </div>
+                        <!-- new message content -->
+                        <div class="msg-content flex items-center gap-[12px]">
+                            <span class="text-[12px] max-w-[190px] truncate">
+                                message content for testing purpose only
+                            </span>
+                            <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
+                                1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-start p-[8px] gap-[8px] border-b ">
+                    <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
+                        <!-- user image -->
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-center justify-between">
+                            <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
+                            <span class="msg-last-time text-[10px]">24/02/1997</span>
+                        </div>
+                        <!-- new message content -->
+                        <div class="msg-content flex items-center gap-[12px]">
+                            <span class="text-[12px] max-w-[190px] truncate">
+                                message content for testing purpose only
+                            </span>
+                            <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
+                                1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-start p-[8px] gap-[8px] border-b ">
+                    <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
+                        <!-- user image -->
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-center justify-between">
+                            <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
+                            <span class="msg-last-time text-[10px]">24/02/1997</span>
+                        </div>
+                        <!-- new message content -->
+                        <div class="msg-content flex items-center gap-[12px]">
+                            <span class="text-[12px] max-w-[190px] truncate">
+                                message content for testing purpose only
+                            </span>
+                            <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
+                                1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-start p-[8px] gap-[8px] border-b">
+                    <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
+                        <!-- user image -->
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-center justify-between">
+                            <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
+                            <span class="msg-last-time text-[10px]">24/02/1997</span>
+                        </div>
+                        <!-- new message content -->
+                        <div class="msg-content flex items-center gap-[12px]">
+                            <span class="text-[12px] max-w-[190px] truncate">
+                                message content for testing purpose only
+                            </span>
+                            <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
+                                1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="chat-room">
+            <div id="user-name" class="px-[20px] py-[12px] flex gap-[14px] items-center justify-between">
+                <div class="rounded-full bg-[grey] w-[40px] h-[40px]">
+                    <!-- user image -->
+                </div>
+                <div class="flex flex-col flex-1">
+                    <div class="text-[16px] font-[700]">Company Name</div>
+                    <div class="text-[12px]">Account Type</div>
+                </div>
+                <div>
+                    <div class="flex px-[8px] py-[5px] bg-[#D1E2FD] text-[#176CF7] text-[12px] font-[600] rounded-[6px]">
+                        WVC8LIIC
+                    </div>
+                </div>
+            </div>
+            <!-- chat content -->
+            <div class="relative">
+                <div id="chat-content" class="bg-[#F8F8F8]">
+
+                </div>
+                <div id="chat-attachment" class="hidden absolute flex flex-col rounded-[6px] border border-[#176CF7] attachment-shadow bg-[#FFFFFF]" style='left:10px; bottom:8px;'>
+                    <button id="file-pic" class="text-[12px] px-[12px] py-[8px] font-[500] flex items-center gap-[10px]">
+                        <img src="./assets/Picture.svg">
+                        Gambar
+                    </button>
+                    <button id="file-doc" class="text-[12px] px-[12px] py-[8px] font-[500] flex items-center gap-[10px]">
+                        <img src="./assets/Document.svg">
+                        Dokumen
+                    </button>
+                    <input class="col-span-12 hidden" type="file" id="fileUpload">
+                </div>
+            </div>
+            <div id="chat-input" class="relative">
+                <div class="flex py-[16px] px-[20px] gap-[12px]">
+                    <button id="attachment">
+                        <img src="./assets/attach_file.svg">
+                    </button>
+                    <input class="flex-1 col-span-7 text-black border rounded-[8px] p-[12px] text-[12px]" placeholder="Tulis pesan anda disini" type="text" id="message">
+                    <button class="" id="send">
+                        <img src="./assets/send_message.svg">
+                    </button>
+                </div>
             </div>
         </div>
     </div>
