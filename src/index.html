@@ -15,7 +15,7 @@
             /* background-color: aliceblue; */
             width: 100%;
             /* max-width: 900px; */
-            max-height: 100vh;
+            /* max-height: 100vh; */
         }
         #chat-name, #chat-input, #chat-content{
             width: 100%;
@@ -42,197 +42,287 @@
         #chat-room{
             width: 544px;
         }
-        #chat-search-input:focus {            
+        #chat-search-input:focus, #chat-option-kategori:focus, #chat-option-user:focus{
             outline: none;
+        }
+        .selected-profile{
+            color: #176CF7;
+            font-weight: 700;
+            border-bottom: 2px solid #176CF7;
+        }
+        .selected-pill{
+            background-color: #176CF7 !important;
+            border-radius: 40px !important;
+            color: white !important;
+            /* padding: 6px 12px; */
+            height: 100%;
+            padding: 0px 12px;
+            display: flex;
+            align-items: center;
+        }
+        .item-sidebar:hover, .active-chat{
+            background-color: #D1E2FD;
+            border-radius: 8px;
+            width: 100%;
         }
     </style>
 </head>
-<body class="p-[10px]">
-    <div id="chat-body" class="flex mx-auto card-shadow">
-        <div id="chat-list" class="flex flex-col border p-[12px]">
-            <!-- commented cause still working on design -->
-            <div class="grid  gap-2 px-[10px]">
-                <h2 class="col-span-2">Name</h2>
-                <input class="col-span-10 text-black border" type="text" id="name">
-            </div>
-            <div class="grid grid-cols-12 gap-2 p-[10px]">
-                <h2 class="col-span-2">Room</h2>
-                <input class="col-span-7 text-black border" type="text" id="room">
-                <button class="col-span-3 text-black border" id="join">Join</button>
-            </div>
-            <div id="chat-search" class="border-b flex gap-[8px] pb-[12px]">
-                <div class="flex border border-[#868686] rounded-[6px] gap-[8px] flex-1">
-                    <img class="py-[8px] ps-[8px]" src="./assets/search.svg">
-                    <input id="chat-search-input" class="text-[12px] font-[500] rounded-[6px] flex-1" type="text" placeholder="Cari Obrolan">
-                </div>
-                <button class="w-[32px] h-[32px] p-[8px] border border-[#868686] rounded-full">
-                    <img src="./assets/chat_filter.svg">
-                </button>
-            </div>
-            <div id="user-list" class="overflow-y-auto w-full flex flex-col gap-[8px] pt-[12px]">
-                <div class="flex p-[8px] gap-[8px] border rounded-[8px] border-[black] ">
-                    <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
-                        <!-- user image -->
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-center justify-between">
-                            <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
-                            <span class="msg-last-time text-[10px]">24/02/1997</span>
-                        </div>
-                        <!-- new message content -->
-                        <div class="msg-content flex items-center gap-[12px]">
-                            <span class="text-[12px] max-w-[190px] truncate">
-                                message content for testing purpose only
-                            </span>
-                            <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
-                                1
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-start p-[8px] gap-[8px] border-b ">
-                    <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
-                        <!-- user image -->
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-center justify-between">
-                            <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
-                            <span class="msg-last-time text-[10px]">Kemarin</span>
-                        </div>
-                        <!-- new message content -->
-                        <div class="msg-content flex items-center gap-[12px]">
-                            <span class="text-[12px] max-w-[190px] truncate">
-                                message content for testing purpose only
-                            </span>
-                            <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
-                                1
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-start p-[8px] gap-[8px] border-b ">
-                    <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
-                        <!-- user image -->
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-center justify-between">
-                            <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
-                            <span class="msg-last-time text-[10px]">24/02/1997</span>
-                        </div>
-                        <!-- new message content -->
-                        <div class="msg-content flex items-center gap-[12px]">
-                            <span class="text-[12px] max-w-[190px] truncate">
-                                message content for testing purpose only
-                            </span>
-                            <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
-                                1
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-start p-[8px] gap-[8px] border-b ">
-                    <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
-                        <!-- user image -->
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-center justify-between">
-                            <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
-                            <span class="msg-last-time text-[10px]">24/02/1997</span>
-                        </div>
-                        <!-- new message content -->
-                        <div class="msg-content flex items-center gap-[12px]">
-                            <span class="text-[12px] max-w-[190px] truncate">
-                                message content for testing purpose only
-                            </span>
-                            <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
-                                1
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-start p-[8px] gap-[8px] border-b ">
-                    <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
-                        <!-- user image -->
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-center justify-between">
-                            <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
-                            <span class="msg-last-time text-[10px]">24/02/1997</span>
-                        </div>
-                        <!-- new message content -->
-                        <div class="msg-content flex items-center gap-[12px]">
-                            <span class="text-[12px] max-w-[190px] truncate">
-                                message content for testing purpose only
-                            </span>
-                            <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
-                                1
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-start p-[8px] gap-[8px] border-b">
-                    <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
-                        <!-- user image -->
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-center justify-between">
-                            <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
-                            <span class="msg-last-time text-[10px]">24/02/1997</span>
-                        </div>
-                        <!-- new message content -->
-                        <div class="msg-content flex items-center gap-[12px]">
-                            <span class="text-[12px] max-w-[190px] truncate">
-                                message content for testing purpose only
-                            </span>
-                            <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
-                                1
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<body>
+    <div class="card-shadow rounded-[6px] mx-[72px] my-[24px] max-w-[1500px] 2xl:mx-auto">
+        <div id="chat-as" class="flex items-center gap-[12px] px-[24px] border-b">
+            <span class="text-[12px] font-[500] py-[15px]">Mengobrol sebagai:</span>
+            <div>
+                <button data-profile = "pembeli" class="chat-as text-[12px] font-[600] px-[24px] p-[14px] selected-profile">Pembeli</button>
+                <button data-profile = "penjual" class="chat-as text-[12px] font-[600] px-[24px] p-[14px]">Penjual</button>
+                <button data-profile = "shipper" class="chat-as text-[12px] font-[600] px-[24px] p-[14px]">Shipper</button>
+                <button data-profile = "transporter" class="chat-as text-[12px] font-[600] px-[24px] p-[14px]">Transporter</button>
             </div>
         </div>
-        <div id="chat-room">
-            <div id="user-name" class="px-[20px] py-[12px] flex gap-[14px] items-center justify-between">
-                <div class="rounded-full bg-[grey] w-[40px] h-[40px]">
-                    <!-- user image -->
+        <div id="chat-body" class="flex mx-auto">
+            <div id="chat-category" class="flex flex-col bg-[#F8F8F8] p-[12px] h-auto max-h-fit rounded-bl-[6px]">
+                <div id="chat-setting" class="border-b flex gap-[8px] pb-[12px] items-center justify-between min-w-[244px]">
+                    <div class="flex items-center border border-[#D7D7D7] rounded-[24px] text-[grey] gap-[4px] h-[24px] p-[2px]">
+                        <button id="chat-option-kategori" class="font-[500] px-[12px] py-[6px] text-[10px] selected-pill">Kategori</button>
+                        <button id="chat-option-user" class="font-[500] px-[12px] py-[6px] text-[10px]">User</button>
+                    </div>
+                    <div>
+                        <button class="w-[32px] h-[32px] p-[8px] border border-[#868686] rounded-full">
+                            <img src="./assets/user_setting.svg">
+                        </button>
+                        <button class="w-[32px] h-[32px] p-[8px] border border-[#868686] rounded-full">
+                            <img src="./assets/burger_icon.svg">
+                        </button>
+                    </div>
                 </div>
-                <div class="flex flex-col flex-1">
-                    <div class="text-[16px] font-[700]">Company Name</div>
-                    <div class="text-[12px]">Account Type</div>
+                <div class="flex-1 py-[12px]">
+                    <div class="pb-[12px] flex items-center gap-[12px]">
+                        <button class="w-[32px] h-[32px] p-[8px] border border-[#868686] rounded-full">
+                            <img src="./assets/Star.svg">
+                        </button>
+                        <span class="text-[14px] font-[600]">Obrolan Favorit</span>
+                    </div>
+                    <div class="pb-[12px] flex items-center gap-[12px] cursor-pointer accordion" data-target="#accordion-item" data-status="close">
+                        <div class="w-[32px] h-[32px] p-[8px] border border-[#868686] rounded-full">
+                            <img src="./assets/Star.svg">
+                        </div>
+                        <span class="text-[14px] font-[600] flex-1">Intermodal Transportation</span>
+                        <img class="arrow" src="./assets/chevron-right.svg">
+                    </div>
+                    <div id="accordion-item" class="ps-[44px] flex flex-col gap-[8px] items-start hidden">
+                        <div class="item-sidebar cursor-pointer p-[8px] text-[14px] text-[#868686] font-[500]">Toko Suku Cadang</div>
+                        <div class="item-sidebar cursor-pointer p-[8px] text-[14px] text-[#868686] font-[500]">Suku Cadang</div>
+                        <div class="item-sidebar cursor-pointer p-[8px] text-[14px] text-[#868686] font-[500]">Ban, Aki, dan Oli</div>
+                        <div class="item-sidebar cursor-pointer p-[8px] text-[14px] text-[#868686] font-[500]">Lainnya</div>
+                    </div>
+                    <div class="pb-[12px] flex items-center gap-[12px] cursor-pointer accordion" data-target="#transportation-store" data-status="close">
+                        <div class="w-[32px] h-[32px] p-[8px] border border-[#868686] rounded-full">
+                            <img src="./assets/Star.svg">
+                        </div>
+                        <span class="text-[14px] font-[600] flex-1">Transportation Store</span>
+                        <img class="arrow" src="./assets/chevron-right.svg">
+                    </div>
+                    <div id="transportation-store" class="ps-[44px] flex flex-col gap-[8px] items-start hidden">
+                        <div class="item-sidebar cursor-pointer p-[8px] text-[14px] text-[#868686] font-[500]">Toko Suku Cadang</div>
+                        <div class="item-sidebar cursor-pointer p-[8px] text-[14px] text-[#868686] font-[500]">Suku Cadang</div>
+                        <div class="item-sidebar cursor-pointer p-[8px] text-[14px] text-[#868686] font-[500]">Ban, Aki, dan Oli</div>
+                        <div class="item-sidebar cursor-pointer p-[8px] text-[14px] text-[#868686] font-[500]">Lainnya</div>
+                    </div>
                 </div>
-                <div>
-                    <div class="flex px-[8px] py-[5px] bg-[#D1E2FD] text-[#176CF7] text-[12px] font-[600] rounded-[6px]">
-                        WVC8LIIC
+                <div id="chat-name" class="border-t flex gap-[8px] pt-[12px] items-center">
+                    <button class="w-[32px] h-[32px] p-[8px] border border-[#868686] rounded-full bg-[#176CF7]">
+                        <img src="./assets/Avatar - Image.png">
+                    </button>
+                    <span class="text-[14px] font-[600] flex-1 max-w-[124px] truncate">Gabriel Gilbert Khomaro</span>
+                    <button class="text-[12px] font-[500] underline text-[#176CF7]">Ubah Nama</button>
+                </div>
+            </div>
+            <div id="chat-list" class="flex flex-col border-x border-b p-[12px]">
+                <!-- commented cause still working on design -->
+                <!-- <div class="grid  gap-2 px-[10px]">
+                    <h2 class="col-span-2">Name</h2>
+                    <input class="col-span-10 text-black border" type="text" id="name">
+                </div>
+                <div class="grid grid-cols-12 gap-2 p-[10px]">
+                    <h2 class="col-span-2">Room</h2>
+                    <input class="col-span-7 text-black border" type="text" id="room">
+                    <button class="col-span-3 text-black border" id="join">Join</button>
+                </div> -->
+                <!-- search bar -->
+                <div id="chat-search" class="border-b flex gap-[8px] pb-[12px]">
+                    <div class="flex border border-[#868686] rounded-[6px] gap-[8px] flex-1">
+                        <img class="py-[8px] ps-[8px]" src="./assets/search.svg">
+                        <input id="chat-search-input" class="text-[12px] font-[500] rounded-[6px] flex-1" type="text" placeholder="Cari Obrolan">
+                    </div>
+                    <button class="w-[32px] h-[32px] p-[8px] border border-[#868686] rounded-full">
+                        <img src="./assets/chat_filter.svg">
+                    </button>
+                </div>
+                <!-- user list -->
+                <div id="user-list" class="overflow-y-auto w-full flex flex-col gap-[8px] pt-[12px]">
+                    <div class="flex p-[8px] gap-[8px] active-chat">
+                        <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
+                            <!-- user image -->
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="flex items-center justify-between">
+                                <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
+                                <span class="msg-last-time text-[10px]">24/02/1997</span>
+                            </div>
+                            <!-- new message content -->
+                            <div class="msg-content flex items-center gap-[12px]">
+                                <span class="text-[12px] max-w-[190px] truncate">
+                                    message content for testing purpose only
+                                </span>
+                                <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
+                                    <img src="./assets/chat_pin.svg">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-start p-[8px] gap-[8px] border-b ">
+                        <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
+                            <!-- user image -->
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="flex items-center justify-between">
+                                <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
+                                <span class="msg-last-time text-[10px]">Kemarin</span>
+                            </div>
+                            <!-- new message content -->
+                            <div class="msg-content flex items-center gap-[12px]">
+                                <span class="text-[12px] max-w-[190px] truncate">
+                                    message content for testing purpose only
+                                </span>
+                                <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center bg-[#F71717] rounded-full text-[white]">
+                                    1
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-start p-[8px] gap-[8px] border-b ">
+                        <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
+                            <!-- user image -->
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="flex items-center justify-between">
+                                <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
+                                <span class="msg-last-time text-[10px]">24/02/1997</span>
+                            </div>
+                            <!-- new message content -->
+                            <div class="msg-content flex items-center gap-[12px]">
+                                <span class="text-[12px] max-w-[190px] truncate">
+                                    message content for testing purpose only
+                                </span>
+                                <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
+                                    1
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-start p-[8px] gap-[8px] border-b ">
+                        <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
+                            <!-- user image -->
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="flex items-center justify-between">
+                                <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
+                                <span class="msg-last-time text-[10px]">24/02/1997</span>
+                            </div>
+                            <!-- new message content -->
+                            <div class="msg-content flex items-center gap-[12px]">
+                                <span class="text-[12px] max-w-[190px] truncate">
+                                    message content for testing purpose only
+                                </span>
+                                <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
+                                    1
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-start p-[8px] gap-[8px] border-b ">
+                        <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
+                            <!-- user image -->
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="flex items-center justify-between">
+                                <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
+                                <span class="msg-last-time text-[10px]">24/02/1997</span>
+                            </div>
+                            <!-- new message content -->
+                            <div class="msg-content flex items-center gap-[12px]">
+                                <span class="text-[12px] max-w-[190px] truncate">
+                                    message content for testing purpose only
+                                </span>
+                                <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
+                                    1
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-start p-[8px] gap-[8px] border-b">
+                        <div class="rounded-full bg-[grey] w-[32px] h-[32px] shrink-0">
+                            <!-- user image -->
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="flex items-center justify-between">
+                                <span class="user-name text-[14px] max-w-[170px] flex-1 font-[700] truncate">User Name Right Here Hell yahh</span>
+                                <span class="msg-last-time text-[10px]">24/02/1997</span>
+                            </div>
+                            <!-- new message content -->
+                            <div class="msg-content flex items-center gap-[12px]">
+                                <span class="text-[12px] max-w-[190px] truncate">
+                                    message content for testing purpose only
+                                </span>
+                                <div class="w-[24px] h-[24px] text-[10px] flex items-center justify-center">
+                                    1
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- chat content -->
-            <div class="relative">
-                <div id="chat-content" class="bg-[#F8F8F8]">
-
+            <div id="chat-room" class="flex flex-col flex-1">
+                <div id="user-name" class="px-[20px] py-[12px] flex gap-[14px] items-center justify-between">
+                    <div class="rounded-full bg-[grey] w-[40px] h-[40px]">
+                        <!-- user image -->
+                    </div>
+                    <div class="flex flex-col flex-1">
+                        <div class="text-[16px] font-[700]">Company Name</div>
+                        <div class="text-[12px]">Account Type</div>
+                    </div>
+                    <div>
+                        <div class="flex px-[8px] py-[5px] bg-[#D1E2FD] text-[#176CF7] text-[12px] font-[600] rounded-[6px]">
+                            WVC8LIIC
+                        </div>
+                    </div>
                 </div>
-                <div id="chat-attachment" class="hidden absolute flex flex-col rounded-[6px] border border-[#176CF7] attachment-shadow bg-[#FFFFFF]" style='left:10px; bottom:8px;'>
-                    <button id="file-pic" class="text-[12px] px-[12px] py-[8px] font-[500] flex items-center gap-[10px]">
-                        <img src="./assets/Picture.svg">
-                        Gambar
-                    </button>
-                    <button id="file-doc" class="text-[12px] px-[12px] py-[8px] font-[500] flex items-center gap-[10px]">
-                        <img src="./assets/Document.svg">
-                        Dokumen
-                    </button>
-                    <input class="col-span-12 hidden" type="file" id="fileUpload">
+                <!-- chat content -->
+                <div class="relative flex flex-col flex-1">
+                    <div id="chat-content" class="bg-[#F8F8F8] flex-1">
+    
+                    </div>
+                    <div id="chat-attachment" class="hidden absolute flex flex-col rounded-[6px] border border-[#176CF7] attachment-shadow bg-[#FFFFFF]" style='left:10px; bottom:8px;'>
+                        <button id="file-pic" class="text-[12px] px-[12px] py-[8px] font-[500] flex items-center gap-[10px]">
+                            <img src="./assets/Picture.svg">
+                            Gambar
+                        </button>
+                        <button id="file-doc" class="text-[12px] px-[12px] py-[8px] font-[500] flex items-center gap-[10px]">
+                            <img src="./assets/Document.svg">
+                            Dokumen
+                        </button>
+                        <input class="col-span-12 hidden" type="file" id="fileUpload">
+                    </div>
                 </div>
-            </div>
-            <div id="chat-input" class="relative">
-                <div class="flex py-[16px] px-[20px] gap-[12px]">
-                    <button id="attachment">
-                        <img src="./assets/attach_file.svg">
-                    </button>
-                    <input class="flex-1 col-span-7 text-black border rounded-[8px] p-[12px] text-[12px]" placeholder="Tulis pesan anda disini" type="text" id="message">
-                    <button class="" id="send">
-                        <img src="./assets/send_message.svg">
-                    </button>
+                <div id="chat-input" class="relative rounded-br-[6px]">
+                    <div class="flex py-[16px] px-[20px] gap-[12px]">
+                        <button id="attachment">
+                            <img src="./assets/attach_file.svg">
+                        </button>
+                        <textarea class="flex-1 col-span-7 text-black border rounded-[8px] p-[12px] text-[12px]" placeholder="Tulis pesan anda disini" type="text" id="message"></textarea>
+                        <button class="" id="send">
+                            <img src="./assets/send_message.svg">
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

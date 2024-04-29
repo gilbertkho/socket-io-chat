@@ -60,9 +60,11 @@ io.on('connection', async (socket) => {
             name: name,
         });
 
-        if(room === ''){
+
+        if(room === '' || !room){
             //broadcast message to all connected user
             socket.broadcast.emit("receive-message", message, name);
+            console.log('tes');
         }
         else{
             //sending message privately to room

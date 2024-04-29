@@ -4,21 +4,25 @@ let connectedUsers = 0;
 
 const showMessage = (message, name = '', info) => {
     let bubble = info ==  'client' ? 
-    `<div class="msg flex justify-end text-black">
-        <div class="w-fit m-[15px] rounded-t-[10px] rounded-bl-[10px] bg-[#176CF7] text-[white]">
-            ${name}
-            <ul class="list-disc list-inside">
+    `<div class="msg flex flex-col gap-[4px] justify-end text-black m-[12px] items-end">
+        <div class="w-fit flex flex-col gap-[6px] p-[12px] rounded-t-[10px] rounded-bl-[10px] bg-[#176CF7] text-[white]">
+            <span class="font-[700] text-[12px]">${name}</span>
+            ${message}
+            <!-- <ul class="list-disc list-inside">
                 <li>${message}</li>
-            </ul>
+            </ul> -->
         </div>
+        <span class="times text-[#868686] text-[10px] font-[500]">08:56</span>
     </div>`: 
-    `<div class="msg flex justify-start text-black">
-        <div class="w-fit p-[10px] m-[15px] rounded-t-[10px] rounded-br-[10px] bg-[#D1E2FD]">
-            ${name}
-            <ul class="msg-content list-disc list-inside ${connectedUsers > 1 ? 'read-receipt' : ''}">
+    `<div class="msg flex flex-col gap-[4px] justify-start text-black m-[12px]">
+        <div class="w-fit flex flex-col gap-[6px] p-[12px] rounded-t-[10px] rounded-br-[10px] bg-[#D1E2FD]">
+            <span class="font-[700] text-[12px]">${name}</span>
+            ${message}
+            <!-- <ul class="msg-content list-disc list-inside ${connectedUsers > 1 ? 'read-receipt' : ''}">
                 <li>${message}</li>
-            </ul>
+            </ul> -->
         </div>
+        <span class="times text-[#868686] text-[10px] font-[500]">08:56</span>
     </div>`;
 
     if(!name  && !info) {
@@ -89,6 +93,78 @@ const showImage = (url, name = '', info) => {
     var elem = document.getElementById('chat-content');
     elem.scrollTop = elem.scrollHeight;
 }
+let accordion = $(".accordion");
+for(let i = 0; i < accordion.length; i++){
+    $(".accordion").eq(i).on('click', function(){
+        if($(this).attr('data-status') == "close"){
+            $('.accordion').eq(i).find('.arrow').css({
+                'transform' : 'rotate(90deg)'
+            });
+           $(this).attr("data-status", "open");
+            let target = $(this).data('target');
+            $(`${target}`).removeClass('hidden');
+        }
+        else if($(this).attr('data-status') == "open"){
+            $('.accordion').eq(i).find('.arrow').css({
+                'transform' : 'rotate(0)'
+            });
+            $(this).attr("data-status", "close");
+            let target = $(this).data('target');
+            $(`${target}`).addClass('hidden');
+        }
+
+        for(let j = 0; j < accordion.length; j++){
+            if(j != i){
+                if($(".accordion").eq(j).attr('data-status') == "open"){
+                    $('.accordion').eq(j).find('.arrow').css({
+                        'transform' : 'rotate(0)'
+                    });
+                    $('.accordion').eq(j).attr("data-status", "close");
+                    let target = $('.accordion').eq(j).data('target');
+                    $(`${target}`).addClass('hidden');
+                }
+            }
+        }
+    });
+}
+
+let chat_as = $(".chat-as");
+for(let i = 0; i < chat_as.length; i++){
+    $(".chat-as").eq(i).on('click', function(){
+        if(!$(this).hasClass('selected-profile')){
+            $(this).addClass('selected-profile');
+            for(let j = 0; j < chat_as.length; j++){
+                if(j != i){
+                    $(".chat-as").eq(j).removeClass('selected-profile');
+                }
+            }
+
+            let profile = $(this).data('profile');
+            console.log('selected profile', profile);
+            //run function for selected profile category based on selected profile
+
+        }
+    });
+}
+
+$("#chat-option-kategori").on('click', function(){
+    if(!$("#chat-option-kategori").hasClass('selected-pill')){
+        $("#chat-option-user").removeClass('selected-pill');
+        $("#chat-option-kategori").addClass('selected-pill');
+    }
+
+
+    //run option kategori
+});
+
+$("#chat-option-user").on('click', function(){
+    if(!$("#chat-option-user").hasClass('selected-pill')){
+        $("#chat-option-kategori").removeClass('selected-pill');
+        $("#chat-option-user").addClass('selected-pill');
+    }
+
+    //run option user
+});
 
 $("#attachment").on('click', function(){
     if($("#chat-attachment").hasClass('hidden')){
