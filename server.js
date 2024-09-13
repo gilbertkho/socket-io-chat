@@ -7,15 +7,29 @@ const app = express();
 const server = require('http').createServer(app);
 const fs = require('node:fs'); //file system API
 const url = require('url'); //url API
+const { createClient } = require("redis");
+const { createAdapter } = require("@socket.io/redis-adapter");
+var {networkInterfaces, networkInterfaces} = require('os');
+
+let localIP = '';
+let netWorkInterfaces = networkInterfaces();
+netWorkInterfaces['Wi-Fi'].forEach((wf,key) => {
+    if(wf.family === 'IPv4'){
+        localIP = wf.address;
+    }
+})
+
 let hostUrl = '';
 
 var admin = require("firebase-admin");
 //get sevice account key from project setting in firebase
-var serviceAccount = require("./muatmuat-10fda-firebase-adminsdk-l7z4g-a32a2fe127.json");
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+//ini dibuka kalau ada firebase adminsdk
+//var serviceAccount = require("./muatmuat-10fda-firebase-adminsdk-l7z4g-a32a2fe127.json");
+
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount)
+// });
 
 //directory for views in src
 app.use(express.static('./src'));
@@ -33,14 +47,28 @@ app.get('/', async(req, res) => {
 });
 
 app.get('/pic', async(req, res) => {
-    return res.status(200).sendFile('tmp/upload/pic.png', {root: '.'});
+    let picName = req.query.name;
+    return res.status(200).sendFile(`tmp/upload/${picName}`, {root: '.'});
 });
 
+//const pubClient = createClient({ url: `redis://${localIP}:8080` });
+//const subClient = pubClient.duplicate();
 const io = require('socket.io')(server,{
     cors: {
-        origin: ['http://localhost:3000'],
+        origin: [
+            'http://localhost:3000',
+            'http://localhost:8080',
+            `http://${localIP}:8080`,
+            "*",
+        ],
     },
+    maxHttpBufferSize: 5e6 //5mb
+    // cors: {
+    //     origin: "*"
+    // },
 });
+
+//io.adapter(createAdapter(pubClient, subClient));
 
 let connectedUsers = [];
 io.on('connection', async (socket) => {
@@ -51,7 +79,7 @@ io.on('connection', async (socket) => {
     //console.log(projects);
     //console.log(socket.id);
 
-    socket.on('send-message', (message, room, name = "") => {
+    socket.on('send-message', (message, room = '', name = '') => {
         //io.emit('receive-message',message);
         //socket.broadcast.emit("receive-message", message);
         console.log('send-message', {
@@ -82,7 +110,7 @@ io.on('connection', async (socket) => {
                 token: registrationToken
             };
 
-            getMessaging().send(notificationMessage)
+            /*getMessaging().send(notificationMessage)
             .then((response) => {
                 // Response is a message ID string.
                 console.log('Successfully sent message:', response);
@@ -91,11 +119,11 @@ io.on('connection', async (socket) => {
                 console.log('Error sending message:', error);
             });
 
-            console.log(notificationMessage);
+            console.log(notificationMessage);*/
         }
     });
 
-    const getConnectedUsersInRoom = async (room, name) => {
+    const getConnectedUsersInRoom = (room = '', name) => {
         let userData = {
             socket_id: socket.id,
             room: room,
@@ -105,13 +133,17 @@ io.on('connection', async (socket) => {
         //console.log("CONNECTED USERS", userData);
         
         let check_users = false //not exist by name and room
-        for(let i = 0; i < connectedUsers.length; i++){
+        let getUserInRoom = connectedUsers.find((cu, key) => cu.room === room & cu.name === name);
+        if(getUserInRoom){
+            check_users = true;
+        }
+        /*for(let i = 0; i < connectedUsers.length; i++){
             if(connectedUsers[i].room && connectedUsers[i].room != ''){
                 if(connectedUsers[i].room  == room && connectedUsers[i].name == name){
                     check_users = true;
                 }
             }
-        }
+        }*/
 
         if(!check_users){
             //add user if user is not yet exist in room
@@ -124,7 +156,7 @@ io.on('connection', async (socket) => {
         //console.log(connectedUsers);
     }
 
-    socket.on('read-receipt', (room, name = '') => {
+    socket.on('read-receipt', (room = '', name = '') => {
         //send back the connected users to client, to check if the other clients still in the room
         getConnectedUsersInRoom(room, name);
     });
@@ -175,7 +207,7 @@ io.on('connection', async (socket) => {
     socket.on('disconnect', () => {
         //console.log('JUMLAH ROOM DISCONNECT',socket.client);
         console.log('SOCKET ID DISCONNECT ',socket.id);
-        if(connectedUsers.length > 0){
+        /*if(connectedUsers.length > 0){
             console.log('USER ARRAY', connectedUsers);
 
             let getDisconnectedIdx = connectedUsers.findIndex((con) => con.socket_id == socket.id);
@@ -185,34 +217,88 @@ io.on('connection', async (socket) => {
             connectedUsers.splice(getDisconnectedIdx, 1);
             console.log('USERS LEFT : ',connectedUsers);
             socket.to(room).emit('disconnected-users', connectedUsers);
-        }
+        }*/
+       //socket.removeAllListeners();
         //getConnectedUsers();
         //var i = connectedUsers.indexOf(socket);
         //connectedUsers.splice(i,1);
     });
 
     //get uploaded file
-    socket.on('upload', (room, name, file, callback) => {
+    socket.on('upload', (room = '', name = '', file, fileData, callback) => {
         console.log('ROOM', room);
         //console.log('tesss');
-        //console.log(file);
-        file = Buffer.from(file,'base64');
+        console.log(JSON.parse(fileData));
+        fileData = JSON.parse(fileData);
+        const file64 = Buffer.from(file,'base64');
 
-        //save file to folder with pic.png file name
-        fs.writeFile("tmp/upload/pic.png", file, (err) => {
-            callback({ message: err ? "failure" : "success" });
+        let fileName = fileData.fileName.replaceAll(" ", "_");
+        let filePath = "tmp/upload/";
+        
+        let imageUrl = `http://localhost:8080/pic?name=${fileName}`;
+
+        //save file to folder with file name with writeFileSync
+        //fs.writeFileSync(`${filePath}${fileName}`, file64);
+
+        //socket.broadcast.emit (send to all clients except new connnection)
+        //socket.emit (send to all clients)
+        // if(room === '' || !room){
+        //     socket.broadcast.emit('get_file', imageUrl, fileName);
+        // }
+        // else{
+        //     socket.to(room).emit('get_file', imageUrl, fileName);
+        // }
+
+        //save file to folder with file name with writeFile
+        fs.writeFile(`${filePath}${fileName}`, file64, (err) => {
+            console.log(err);
+            const img_extension = ['jpg', 'jpeg', 'png'];
+            let checkFile = img_extension.find((ext, key) => fileName.includes(ext) || fileName.includes(ext.toUpperCase()));
+            if(checkFile){
+                console.log('THIS IS IMAGE');
+                checkFile = {
+                    name: fileName,
+                    size: fileData.fileSize,
+                    type: 'IMAGE',
+                };
+            }
+            else{
+                console.log('THIS IS NOT IMAGE');
+                checkFile = {
+                    name: fileName,
+                    size: fileData.fileSize,
+                    type: 'FILE',
+                };
+            }
+            callback({ 
+                status: err ? "error" : "success",
+                type: checkFile,
+            });
             if(err){
                 //if error 
                 console.log(err);
             }
             else{
                 //if success
-                let imageUrl = "http://localhost:8080/pic";
-                socket.to(room).emit('getFile', imageUrl, name);
-                console.log('file upload success');
+                if(room === ''){
+                    socket.broadcast.emit('get_file', imageUrl, name, checkFile);
+                    console.log('file upload success BROADCAST');
+                }
+                else{
+                    socket.to(room).emit('get_file', imageUrl, name, checkFile);
+                    console.log('file upload success');
+                }
             }
         });
+
     })
+});
+
+io.engine.on("connection_error", (err) => {
+    console.log(err.req);      // the request object
+    console.log(err.code);     // the error code, for example 1
+    console.log(err.message);  // the error message, for example "Session ID unknown"
+    console.log(err.context);  // some additional error context
 });
 
 server.listen(8080, () => { 

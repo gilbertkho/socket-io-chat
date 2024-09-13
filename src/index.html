@@ -68,7 +68,7 @@
     </style>
 </head>
 <body>
-    <div class="card-shadow rounded-[6px] mx-[72px] my-[24px] max-w-[1500px] 2xl:mx-auto">
+    <div class="card-shadow rounded-[6px] lg:mx-[72px] lg:my-[24px] lg:max-w-[1500px] 2xl:mx-auto w-100">
         <div id="chat-as" class="flex items-center gap-[12px] px-[24px] border-b">
             <span class="text-[12px] font-[500] py-[15px]">Mengobrol sebagai:</span>
             <div>
@@ -79,7 +79,7 @@
             </div>
         </div>
         <div id="chat-body" class="flex mx-auto">
-            <div id="chat-category" class="flex flex-col bg-[#F8F8F8] p-[12px] h-auto max-h-fit rounded-bl-[6px]">
+            <div id="chat-category" class="lg:flex flex-col bg-[#F8F8F8] p-[12px] h-auto max-h-fit rounded-bl-[6px] hidden">
                 <div id="chat-setting" class="border-b flex gap-[8px] pb-[12px] items-center justify-between min-w-[244px]">
                     <div class="flex items-center border border-[#D7D7D7] rounded-[24px] text-[grey] gap-[4px] h-[24px] p-[2px]">
                         <button id="chat-option-kategori" class="font-[500] px-[12px] py-[6px] text-[10px] selected-pill">Kategori</button>
@@ -136,9 +136,9 @@
                     <button class="text-[12px] font-[500] underline text-[#176CF7]">Ubah Nama</button>
                 </div>
             </div>
-            <div id="chat-list" class="flex flex-col border-x border-b p-[12px]">
+            <div id="chat-list" class="lg:flex flex-col border-x border-b p-[12px] hidden">
                 <!-- commented cause still working on design -->
-                <!-- <div class="grid  gap-2 px-[10px]">
+                <div class="grid  gap-2 px-[10px]">
                     <h2 class="col-span-2">Name</h2>
                     <input class="col-span-10 text-black border" type="text" id="name">
                 </div>
@@ -146,7 +146,7 @@
                     <h2 class="col-span-2">Room</h2>
                     <input class="col-span-7 text-black border" type="text" id="room">
                     <button class="col-span-3 text-black border" id="join">Join</button>
-                </div> -->
+                </div>
                 <!-- search bar -->
                 <div id="chat-search" class="border-b flex gap-[8px] pb-[12px]">
                     <div class="flex border border-[#868686] rounded-[6px] gap-[8px] flex-1">
@@ -298,7 +298,7 @@
                 </div>
                 <!-- chat content -->
                 <div class="relative flex flex-col flex-1">
-                    <div id="chat-content" class="bg-[#F8F8F8] flex-1">
+                    <div id="chat-content" class="bg-[#F8F8F8] flex-1 max-h-100">
     
                     </div>
                     <div id="chat-attachment" class="hidden absolute flex flex-col rounded-[6px] border border-[#176CF7] attachment-shadow bg-[#FFFFFF]" style='left:10px; bottom:8px;'>
