@@ -7,8 +7,8 @@ const app = express();
 const server = require('http').createServer(app);
 const fs = require('node:fs'); //file system API
 const url = require('url'); //url API
-const { createClient } = require("redis");
-const { createAdapter } = require("@socket.io/redis-adapter");
+//const { createClient } = require("redis");
+//const { createAdapter } = require("@socket.io/redis-adapter");
 var {networkInterfaces, networkInterfaces} = require('os');
 
 let localIP = '';

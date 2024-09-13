@@ -1,5 +1,5 @@
-const socket = io('http://192.168.9.100:8080');
-//const socket = io('http://localhost:8080');
+//const socket = io('http://192.168.9.100:8080'); //change this when hosting server based on local ip
+const socket = io('http://localhost:8080'); // use this for local hosting server
 
 let connectedUsers = 0;
 
@@ -55,14 +55,19 @@ const showImage = (url, name = '', info, file = {type: 'IMAGE'}) => {
         <div class="w-fit flex flex-col gap-[4px] rounded-t-[10px] rounded-br-[10px] p-[10px] m-[15px] bg-[#176CF7] text-[white]">
             <span class="font-[700] text-[12px]">${name}</span>
             <!-- <img src="${url}"/> -->
+            <a href="${url}" target="blank_">
             ${file.type === 'IMAGE' ?
                 `<div class="bg-cover bg-center w-[150px] h-[150px]" style="background-image: url(${url});"/></div>`
                 :
-                `<div class="flex flex-col w-[100px] h-[100px] text-[10px] border-2 border-[white] border-dashed p-[4px] items-start justify-center overflow-hidden"/>
-                    <span class='truncate'>${file.name}</span>
+                `<div class="flex flex-col w-[150px] h-[75px] text-[10px] border-2 border-[white] border-dashed p-[4px] items-center justify-center overflow-hidden"/>
+                    <div class="flex gap-[4px]">
+                        <img src="./assets/Document.svg">
+                        <span class='truncate'>${file.name}</span>
+                    </div>
                     <span class='truncate'>${(file.size/1000000).toFixed(2)} MB</span>
                 </div>`
             }
+            </a>
             <!-- <ul class="list-disc list-inside">
                 <li><img src="${url}" onclick=""/></li>
             </ul> -->
@@ -78,14 +83,19 @@ const showImage = (url, name = '', info, file = {type: 'IMAGE'}) => {
         <div class="w-fit flex flex-col gap-[4px] rounded-t-[10px] rounded-bl-[10px] p-[10px] m-[15px] bg-[#D1E2FD]">
             <span class="font-[700] text-[12px]">${name}</span>
             <!-- <img src="${url}"/> -->
+            <a href="${url}" target="blank_">
             ${file.type === 'IMAGE' ?
                 `<div class="bg-cover bg-center w-[150px] h-[150px]" style="background-image: url(${url});"/></div>`
                 :
-                `<div class="flex flex-col w-[100px] h-[100px] text-[10px] border-2 border-[#868686] border-dashed p-[4px] items-start justify-center overflow-hidden"/>
-                    <span class='truncate'>${file.name}</span>
+                `<div class="flex flex-col w-[150px] h-[75px] text-[10px] border-2 border-[#868686] border-dashed p-[4px] items-center justify-center overflow-hidden"/>
+                    <div class="flex gap-[4px]">
+                        <img src="./assets/Document.svg">
+                        <span class='truncate'>${file.name}</span>
+                    </div>
                     <span class='truncate'>${(file.size/1000000).toFixed(2)} MB</span>
                 </div>`
             }
+            </a>
             <!-- <ul class="msg-content list-disc list-inside ${connectedUsers > 1 ? 'read-receipt' : ''}">
                 <li><img src="${url}"/></li>
             </ul> -->
@@ -115,7 +125,7 @@ const showTypingStatus = (status, info) => {
     let bubble = info ==  'client' ? 
     `<div class="typing flex justify-start text-black m-[12px]">
         <div class="w-fit p-[4px] rounded-t-[10px] rounded-br-[10px] bg-[#176CF7]">
-            <img style="background-image:url('./typing.gif')" width='100' height="50" class="bg-cover">
+            <div style="background-image:url('./typing.gif')" class="bg-cover bg-center w-[100px] h-[50px]"></div>
         </div>
     </div>`: 
     `<div class="typing flex justify-end text-black m-[12px]">
